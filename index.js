@@ -5,48 +5,111 @@
 const fs = require("fs");
 const path = require("path");
 const inquirer = require("inquirer");
+const readline = require("readline");
 
-let pathInput = process.argv[2];
-
-function getFilesInDirectory(pathInput) {
-  fs.readdir(pathInput, (error, fileList) => {
-    if (error) {
-      console.error("Erro", error);
-    } else {
-      const filterList = fileList.filter((file) => {
-        return path.extname(file) === ".md";
-      });
-
-      if (filterList.length === 0) {
-        console.log("Não foram encontrados arquivos .md no diretório.");
+function getFileType(path) {
+  return new Promise((resolve, reject) => {
+    fs.stat(path, (err, stats) => {
+      if (err) {
+        reject(err);
       } else {
-        inquirer
-          .prompt([
-            {
-              type: "list",
-              name: "selectedFile",
-              message: "Selecione um arquivo para exibição:",
-              choices: filterList,
-            },
-          ])
-          .then((answers) => {
-            const selectedFile = answers.selectedFile;
-            const filePath = path.join(pathInput, selectedFile);
-            readFile(filePath); //chamada da função para ler e exibir o arquivo
-          });
+        if (stats.isFile()) {
+          resolve("file");
+        } else if (stats.isDirectory()) {
+          resolve("directory");
+        } else {
+          reject("O caminho fornecido não é um arquivo nem um diretório válido.");
+        }
       }
-    }
+    });
+  });
+}
+
+function getFilesInDirectory(directoryPath) {
+  return new Promise((resolve, reject) => {
+    fs.readdir(directoryPath, (error, fileList) => {
+      if (error) {
+        reject(error);
+      } else {
+        const filterList = fileList.filter((file) => {
+          return path.extname(file) === ".md";
+        });
+
+        resolve(filterList);
+      }
+    });
   });
 }
 
 function readFile(filePath) {
-  fs.readFile(filePath, (error, file) => {
-    if (error) {
-      console.error("Erro", error);
-    } else {
-      console.log(file.toString());
-    }
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, (error, file) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(file.toString());
+      }
+    });
   });
 }
 
-getFilesInDirectory(pathInput);
+function mdLinks() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.question("Digite o caminho do arquivo ou diretório: ", (inputPath) => {
+    rl.close();
+
+    getFileType(inputPath)
+      .then((type) => {
+        if (type === "file") {
+          return readFile(inputPath);
+        } else if (type === "directory") {
+          return getFilesInDirectory(inputPath)
+            .then((fileList) => {
+              if (fileList.length === 0) {
+                console.log("Não foram encontrados arquivos .md no diretório.");
+                return null;
+              } else {
+                const fileChoices = fileList.map((file) => {
+                  return {
+                    name: file,
+                    value: path.join(inputPath, file),
+                  };
+                });
+
+                return inquirer
+                  .prompt([
+                    {
+                      type: "list",
+                      name: "selectedFile",
+                      message: "Selecione um arquivo para exibição:",
+                      choices: fileChoices,
+                    },
+                  ])
+                  .then((answers) => {
+                    const selectedFile = answers.selectedFile;
+                    return readFile(selectedFile);
+                  });
+              }
+            });
+        } else {
+          console.log("Caminho fornecido inválido.");
+          return null;
+        }
+      })
+      .then((fileContent) => {
+        if (fileContent) {
+          console.log(fileContent);
+        }
+      })
+      .catch((error) => {
+        console.error("Erro", error);
+      });
+  });
+}
+
+mdLinks();
+

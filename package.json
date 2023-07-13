@@ -9,6 +9,9 @@
     "version": "6.3.0",
     "commit": "c17498042fc79734cec390e6314cbe810e95bf4c"
   },
+  "scripts": {
+    "mdLinks": "node index.js"
+  },
   "dependencies": {
     "inquirer": "^7.3.3"
   }
