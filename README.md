@@ -484,7 +484,7 @@ criado das seguintes maneiras (todas são válidas):
   transformar o markdown em um HTML usando o
   [marked](https://github.com/markedjs/marked) e depois extrair os links com uma
   biblioteca de DOM como [JSDOM](https://github.com/jsdom/jsdom) o
-  [Cheerio](https://github.com/cheeriojs/cheerio)).
+  [Cheerio](https://github.com/cheeriojs/cheerio).
 * Usando um _custom renderer_ de [marked](https://github.com/markedjs/marked)
   (`new marked.Renderer()`).
 

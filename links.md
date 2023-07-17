@@ -8,7 +8,7 @@ Links para teste do projeto:
 
 [Gmail](https://mail.google.com/mail/u/0/)
 
-[Netflix](https://www.netflix.com/br/)
+[Google](https://www.google.com)
 
 [Spotify](https://open.spotify.com/)
 
