@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
+// Lê um arquivo e busca por links no formato Markdown
 function getLinks(file) {
   return new Promise((resolve, reject) => {
     fs.readFile(file, 'utf8', (err, data) => {
@@ -16,7 +17,7 @@ function getLinks(file) {
           links.push({
             href: match[2],
             text: match[1],
-            file: file
+            file: file,
           });
         }
 
@@ -26,38 +27,38 @@ function getLinks(file) {
   });
 }
 
-function isDirectory(dirPath) {
-  const stats = fs.lstatSync(dirPath);
-  return stats.isDirectory();
-}
-
-function getFilesInDirectory(dirPath) {
-  return fs.readdirSync(dirPath);
-}
-
-function filterMarkdownFiles(files) {
-  return files.filter((file) => path.extname(file) === '.md');
-}
-
-function processDirectory(dirPath, options) {
-  const files = getFilesInDirectory(dirPath);
-  const markdownFiles = filterMarkdownFiles(files);
-  const promises = markdownFiles.map((file) => {
-    const fullPath = path.join(dirPath, file);
-    return mdLinks(fullPath, options);
+// Verifica se o caminho é um diretório
+// Obtém a lista de arquivos em um diretório
+// Filtra apenas os arquivos Markdown da lista de arquivos
+function getMarkdownFiles(dirPath) {
+  return new Promise((resolve, reject) => {
+    fs.readdir(dirPath, (err, files) => {
+      if (err) {
+        reject(err);
+      } else {
+        const markdownFiles = files.filter((file) => path.extname(file) === '.md');
+        resolve(markdownFiles);
+      }
+    });
   });
-
-  return Promise.all(promises)
-    .then((results) => [].concat(...results));
 }
 
-function isMarkdownFile(filePath) {
-  return path.extname(filePath) === '.md';
+// Processa um diretório, buscando e processando arquivos Markdown
+function processDirectory(dirPath, options) {
+  return getMarkdownFiles(dirPath).then((markdownFiles) => {
+    const promises = markdownFiles.map((file) => {
+      const fullPath = path.join(dirPath, file);
+      return mdLinks(fullPath, options);
+    });
+
+    return Promise.all(promises).then((results) => [].concat(...results));
+  });
 }
 
+// Verifica se o caminho é um arquivo Markdown
+// Processa um arquivo Markdown, buscando e validando os links
 function processMarkdownFile(filePath, options) {
-  return getLinks(filePath)
-    .then((links) => {
+    return getLinks(filePath).then((links) => {
       if (options.validate) {
         const linkPromises = links.map((link) => {
           return axios.get(link.href)
@@ -66,32 +67,35 @@ function processMarkdownFile(filePath, options) {
               link.ok = response.statusText;
               return link;
             })
-            .catch((error) => {
-              link.status = error.response ? error.response.status : 'N/A';
+            .catch(() => {
+              link.status = 404;
               link.ok = 'fail';
               return link;
             });
         });
-
-        return Promise.all(linkPromises)
-          .then((results) => results);
+  
+        return Promise.all(linkPromises);
       } else {
         return links;
       }
     });
-}
+  }
 
+// Função principal: Recebe o caminho e opções, processa diretório ou arquivo e retorna os links
 function mdLinks(filePath, options = {}) {
   const absolutePath = path.resolve(filePath);
 
-  if (isDirectory(absolutePath)) {
+  if (fs.lstatSync(absolutePath).isDirectory()) {
     return processDirectory(absolutePath, options);
-  } else if (isMarkdownFile(absolutePath)) {
+  } else if (path.extname(absolutePath) === '.md') {
     return processMarkdownFile(absolutePath, options);
   } else {
     return Promise.resolve([]);
   }
 }
+
+module.exports = { mdLinks };
+
 
 function statsLinks(links) {
   const total = links.length;
