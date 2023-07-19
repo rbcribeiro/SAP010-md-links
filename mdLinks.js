@@ -67,7 +67,7 @@ function processMarkdownFile(filePath, options) {
               return link;
             })
             .catch((error) => {
-              link.status = error.response ? error.response.status : 'N/A';
+              link.status = error.response ? error.response.status : '404';
               link.ok = 'fail';
               return link;
             });
