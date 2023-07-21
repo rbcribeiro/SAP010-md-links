@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
+const chalk = require('chalk');
 
 // Lê um arquivo e busca por links no formato Markdown
 function getLinks(file) {
@@ -85,16 +86,20 @@ function processMarkdownFile(filePath, options) {
 function mdLinks(filePath, options = {}) {
   const absolutePath = path.resolve(filePath);
 
+  if (!fs.existsSync(absolutePath)) {
+    console.log(chalk.red.bold('O caminho fornecido não é válido.'));
+    return Promise.resolve([]);
+  }
+
   if (fs.lstatSync(absolutePath).isDirectory()) {
     return processDirectory(absolutePath, options);
   } else if (path.extname(absolutePath) === '.md') {
     return processMarkdownFile(absolutePath, options);
   } else {
+    console.log(chalk.red.bold('O caminho fornecido não é um diretório nem um arquivo Markdown.'));
     return Promise.resolve([]);
   }
 }
-
-module.exports = { mdLinks };
 
 
 function statsLinks(links) {
