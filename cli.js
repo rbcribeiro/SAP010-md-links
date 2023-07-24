@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 const { mdLinks, statsLinks } = require('./mdLinks');
 const chalk = require('chalk');
 

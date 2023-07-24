@@ -86,19 +86,23 @@ function processMarkdownFile(filePath, options) {
 function mdLinks(filePath, options = {}) {
   const absolutePath = path.resolve(filePath);
 
-  if (!fs.existsSync(absolutePath)) {
-    console.log(chalk.red.bold('O caminho fornecido não é válido.'));
-    return Promise.resolve([]);
-  }
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(absolutePath)) {
+      reject('O caminho fornecido não é válido.');
+    }
 
-  if (fs.lstatSync(absolutePath).isDirectory()) {
-    return processDirectory(absolutePath, options);
-  } else if (path.extname(absolutePath) === '.md') {
-    return processMarkdownFile(absolutePath, options);
-  } else {
-    console.log(chalk.red.bold('O caminho fornecido não é um diretório nem um arquivo Markdown.'));
-    return Promise.resolve([]);
-  }
+    if (fs.lstatSync(absolutePath).isDirectory()) {
+      processDirectory(absolutePath, options)
+        .then(resolve)
+        .catch(reject);
+    } else if (path.extname(absolutePath) === '.md') {
+      processMarkdownFile(absolutePath, options)
+        .then(resolve)
+        .catch(reject);
+    } else {
+      reject('O caminho fornecido não é um diretório nem um arquivo Markdown.');
+    }
+  });
 }
 
 
