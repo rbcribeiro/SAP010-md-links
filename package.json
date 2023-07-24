@@ -19,7 +19,6 @@
     "eslint": "eslint --ext .js test/"
   },
   "dependencies": {
-    "axios": "^1.4.0",
     "chalk": "^4.0.0",
     "cross-fetch": "^4.0.0",
     "fs": "^0.0.1-security",
@@ -35,9 +34,10 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
+    "axios": "^1.4.0",
     "eslint": "^8.43.0",
     "eslint-plugin-jest": "^25.3.0",
-    "jest": "^29.5.0"
+    "jest": "^29.6.1"
   },
   "description": "Leitor de arquivos .md executado no nodejs",
   "main": "cli.js",
