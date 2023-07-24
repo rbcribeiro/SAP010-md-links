@@ -17,7 +17,6 @@ Bem-vindo ao MdLinks! Esta é uma biblioteca para ler e extrair links de arquivo
 ## Índice
 
 - [Sobre o Projeto](#sobre-o-projeto)
-- [Fluxograma](#fluxograma)
 - [Instalação](#instalação)
 - [Como Utilizar](#como-utilizar)
 - [Objetivos alcançados](#objetivos-alcançados)
@@ -31,18 +30,12 @@ Bem-vindo ao MdLinks! Esta é uma biblioteca para ler e extrair links de arquivo
 
 O objetivo deste projeto é facilitar a extração de links contidos em arquivos Markdown e fornecer informações adicionais, como a validação da disponibilidade dos links. É uma ferramenta útil para quem trabalha com projetos em Markdown e precisa verificar a integridade dos links.
 
-## Fluxograma
-
-Antes de começar a escrever o código, criei um fluxograma para visualizar as etapas do projeto. Organizar e planejar as tarefas utilizando o Github Projects, criando issues para cada etapa do projeto.
-
-[falta inserir fluxograma]
-
 ## Instalação
 
 Para utilizar esta biblioteca, é necessário instalá-la via npm. Abra o terminal e execute o seguinte comando:
 
 ```
-npm install [falta completar]
+npm i md-links-renata-ribeiro
 ```
 
 
@@ -59,25 +52,29 @@ Opções disponíveis:
 
 - `--validate`: Verifica a disponibilidade dos links encontrados.
 
-[inserir img validate]
+<div align="center"><img src="./img/validate.JPG" width="450" /> </div>
 
 - `--stats`: Exibe estatísticas sobre os links encontrados, como total e únicos.
 
-[inserir img stats]
+<div align="center"><img src="./img/stats.JPg" width="450"/></div>
 
 - `-- validate --stats`: Exibe estatísticas sobre os links encontrados, como total, únicos e quebrados.
 
-[inserir img validate stats]
+<div align="center"><img src="./img/validate_stats.JPG" width="450"/></div>
 
 ### Exemplos de uso:
 
-Para inspecionar o arquivo, digite o nome e extensão:
+Para inspecionar o arquivo digite o nome com extensão md:
 ```
 md-links ./arquivo.md --validate --stats
+md-links ./arquivo.md --validate
+md-links ./arquivo.md --stats
 ```
 Para inspecionar um diretório:
 ```
 md-links ./pasta-de-arquivos --validate --stats
+md-links ./pasta-de-arquivos --validate
+md-links ./pasta-de-arquivos --stats
 ```
 Caso seja fornecido o caminho de um diretório ele retornará a validação/status dos links referente a todos os arquivos markdown encontrados.
 
@@ -93,7 +90,7 @@ Caso seja fornecido o caminho de um diretório ele retornará a validação/stat
 
 ## Tecnologias Utilizadas
 
-- ` JavaScript (js)` - Linguagem utilizada para desenvolvimento;
+- ` JavaScript` - Linguagem utilizada para desenvolvimento;
 - ` Git` - Sistema para controlar o histórico de alterações de arquivos;
 - `GitHub` -Hospedagem em nuvem para armazenar o repositório do projeto;
 - `GitHub Projects` - Ferramenta utilizada para planejamento e organização;
