@@ -18,7 +18,7 @@ Bem-vindo ao MdLinks! Esta é uma biblioteca para ler e extrair links de arquivo
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Instalação](#instalação)
-- [Como Utilizar](#como-utilizar)
+- [Utilização](#como-utilizar)
 - [Objetivos alcançados](#objetivos-alcançados)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Considerações Finais](#considerações-finais)
@@ -40,7 +40,7 @@ npm i md-links-renata-ribeiro
 
 
 
-## Como Utilizar
+## Utilização
 
 Esta biblioteca pode ser utilizada através da linha de comando (CLI). Após a instalação global, o executável `md-links` estará disponível no path do seu sistema. Você pode usá-lo da seguinte forma:
 
@@ -52,15 +52,15 @@ Opções disponíveis:
 
 - `--validate`: Verifica a disponibilidade dos links encontrados.
 
-<div align="center"><img src="./img/validate.JPG" width="450" /> </div>
+<div align="center"><img src="./img/validate.JPG" width="500" /> </div>
 
 - `--stats`: Exibe estatísticas sobre os links encontrados, como total e únicos.
 
-<div align="center"><img src="./img/stats.JPg" width="450"/></div>
+<div align="center"><img src="./img/stats.JPG" width="500"/></div>
 
 - `-- validate --stats`: Exibe estatísticas sobre os links encontrados, como total, únicos e quebrados.
 
-<div align="center"><img src="./img/validate_stats.JPG" width="450"/></div>
+<div align="center"><img src="./img/validate_stats.JPG" width="500"/></div>
 
 ### Exemplos de uso:
 
