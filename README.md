@@ -62,6 +62,10 @@ Opções disponíveis:
 
 <div align="center"><img src="./img/validate_stats.JPG" width="500"/></div>
 
+- `Sem definir opção(validate/stats)`: Exibe informações como o diretório, texto e links encontrados
+
+<div align="center"><img src="./img/sem_opcao.JPG" width="500"/></div>
+
 ### Exemplos de uso:
 
 Para inspecionar o arquivo digite o nome com extensão md:
@@ -69,12 +73,14 @@ Para inspecionar o arquivo digite o nome com extensão md:
 md-links ./arquivo.md --validate --stats
 md-links ./arquivo.md --validate
 md-links ./arquivo.md --stats
+md-links ./arquivo.md 
 ```
 Para inspecionar um diretório:
 ```
 md-links ./pasta-de-arquivos --validate --stats
 md-links ./pasta-de-arquivos --validate
 md-links ./pasta-de-arquivos --stats
+md-links ./pasta-de-arquivos
 ```
 Caso seja fornecido o caminho de um diretório ele retornará a validação/status dos links referente a todos os arquivos markdown encontrados.
 

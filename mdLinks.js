@@ -88,10 +88,8 @@ function mdLinks(filePath, options = {}) {
 
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(absolutePath)) {
-      reject('O caminho fornecido não é válido.');
-    }
-
-    if (fs.lstatSync(absolutePath).isDirectory()) {
+      reject('Caminho inválido.');
+    } else if (fs.lstatSync(absolutePath).isDirectory()) {
       processDirectory(absolutePath, options)
         .then(resolve)
         .catch(reject);
@@ -104,6 +102,7 @@ function mdLinks(filePath, options = {}) {
     }
   });
 }
+
 
 
 function statsLinks(links) {
