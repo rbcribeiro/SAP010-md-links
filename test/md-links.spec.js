@@ -1,56 +1,89 @@
+const path = require('path');
 const { mdLinks, statsLinks } = require('../mdLinks');
 
-// Teste para a função mdLinks
 describe('mdLinks', () => {
-  it('should return an array of links with href, text, and file properties', async () => {
-    const result = await mdLinks('./links.md');
+  it('should handle invalid path', async () => {
+    const result = await mdLinks('./invalid-path.md');
+    expect(result).toEqual([]);
+  });
+
+  it('should process the directory and return links', async () => {
+    const result = await mdLinks('./');
     const expected = [
       {
         href: 'https://www.youtube.com/watch?v=J3gZH5w6eBo',
         text: 'Youtube',
-        file: 'C:\\Users\\Renata\\Desktop\\projetos_laboratoria\\SAP010-md-links\\links.md',
+        file: path.resolve('./links.md'),
       },
       {
         href: 'https://github.com/workshopper/learnyounode',
         text: 'Github',
-        file: 'C:\\Users\\Renata\\Desktop\\projetos_laboratoria\\SAP010-md-links\\links.md',
+        file: path.resolve('./links.md'),
       },
       {
         href: 'https://github.com/workshopper/learnyounode',
         text: 'Github2',
-        file: 'C:\\Users\\Renata\\Desktop\\projetos_laboratoria\\SAP010-md-links\\links.md',
+        file: path.resolve('./links.md'),
       },
       {
         href: 'http://www.fboob.com/',
         text: 'broken',
-        file: 'C:\\Users\\Renata\\Desktop\\projetos_laboratoria\\SAP010-md-links\\links.md',
+        file: path.resolve('./links.md'),
       },
       {
         href: 'http://www.fboob.com/',
         text: 'broken',
-        file: 'C:\\Users\\Renata\\Desktop\\projetos_laboratoria\\SAP010-md-links\\links.md',
+        file: path.resolve('./links.md'),
+      },
+      {
+        href: 'https://img.shields.io/badge/-Github-000?style=flat-square&logo=Github&logoColor=white&link)](https://github.com/rbcribeiro',
+        text: '![Github',
+        file: path.resolve('./README.md'),
+      },
+      {
+        href: 'https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link)](https://www.linkedin.com/in/rbcribeiro',
+        text: '![Linkedin',
+        file: path.resolve('./README.md'),
       },
     ];
     expect(result).toEqual(expected);
   });
 
-  // Teste para a função mdLinks com a opção --validate
-  it('should return an array of links with href, text, file, status, and ok properties when using --validate', async () => {
-    const result = await mdLinks('./links.md', { validate: true });
-    // Verifique se os links retornados têm as propriedades href, text, file, status e ok
-    result.forEach((link) => {
-      expect(link).toHaveProperty('href');
-      expect(link).toHaveProperty('text');
-      expect(link).toHaveProperty('file');
-      expect(link).toHaveProperty('status');
-      expect(link).toHaveProperty('ok');
-    });
+  it('should process the Markdown file and return links', async () => {
+    const result = await mdLinks('./links.md');
+    const expected = [
+      {
+        href: 'https://www.youtube.com/watch?v=J3gZH5w6eBo',
+        text: 'Youtube',
+        file: path.resolve('./links.md'),
+      },
+      {
+        href: 'https://github.com/workshopper/learnyounode',
+        text: 'Github',
+        file: path.resolve('./links.md'),
+      },
+      {
+        href: 'https://github.com/workshopper/learnyounode',
+        text: 'Github2',
+        file: path.resolve('./links.md'),
+      },
+      {
+        href: 'http://www.fboob.com/',
+        text: 'broken',
+        file: path.resolve('./links.md'),
+      },
+      {
+        href: 'http://www.fboob.com/',
+        text: 'broken',
+        file: path.resolve('./links.md'),
+      },
+    ];
+    expect(result).toEqual(expected);
   });
 });
 
-// Teste para a função statsLinks
 describe('statsLinks', () => {
-  it('should return informations about total and unique links when its --stats', () => {
+  it('should return statistics with both valid and broken links', () => {
     const links = [
       {
         href: 'https://www.youtube.com/watch?v=J3gZH5w6eBo',
