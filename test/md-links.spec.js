@@ -9,13 +9,6 @@ describe('mdLinks', () => {
           expect(error).toBe('O caminho fornecido não é um diretório nem um arquivo Markdown.');
         });
     });
-    it('should reject with an error message when the path is not a Markdown file or directory', () => {
-      const invalidPath = '64545614'; // Caminho inválido (não é .md nem diretório)
-      return mdLinks(invalidPath)
-        .catch((error) => {
-          expect(error).toBe('O caminho fornecido não é um diretório nem um arquivo Markdown.');
-        });
-    });
 
   it('should process the directory and return links', () => {
     return mdLinks('./')
@@ -45,6 +38,11 @@ describe('mdLinks', () => {
             href: 'http://www.fboob.com/',
             text: 'broken',
             file: path.resolve('./links.md'),
+          },
+          {
+            href: 'https://docs.pipz.com/central-de-ajuda/learning-center/guia-basico-de-markdown#open',
+            text:  'Markdown',
+            file: path.resolve('./README.md'),
           },
           {
             href: 'https://img.shields.io/badge/-Github-000?style=flat-square&logo=Github&logoColor=white&link)](https://github.com/rbcribeiro',
