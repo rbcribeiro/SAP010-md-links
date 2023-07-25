@@ -1,6 +1,6 @@
 const MockAdapter = require('axios-mock-adapter');
 const path = require('path');
-const { mdLinks, statsLinks, processMarkdownFile } = require('../mdLinks');
+const { mdLinks, statsLinks, processDirectory, processMarkdownFile } = require('../mdLinks');
 const axios = require('axios');
 
 const expectedDirectory = [
@@ -129,80 +129,22 @@ describe('processMarkdownFile', () => {
         expect(validatedLinks).toEqual(links);
       });
   });
-  
+
+  it('should reject with an error when processing an invalid Markdown file', () => {
+    const invalidFilePath = '/path/to/invalid/file.md';
+    return processMarkdownFile(invalidFilePath, {})
+      .catch((error) => {
+        expect(error).toBeDefined(); // Verifica se um erro foi gerado
+      });
+  });
 })
 
-
-
-
-
-
-
-
-
-
-
-// describe('processMarkdownFile', () => {
-//   it('should validate links if "validate" option is true', () => {
-//     const mock = new MockAdapter(axios);
-//     mock.onGet('https://www.youtube.com/watch?v=J3gZH5w6eBo').reply(200, 'OK');
-//     mock.onGet('https://github.com/workshopper/learnyounode').reply(200, 'OK');
-//     mock.onGet('https://github.com/workshopper/learnyounode').reply(200, 'OK');
-//     mock.onGet('http://www.teste.com/').reply(404, 'fail');
-//     mock.onGet('http://www.testeteste.com/').reply(404, 'fail');
-
-
-//     const options = { validate: true };
-
-//     return processMarkdownFile('./links.md', options)
-//       .then((validatedLinks) => {
-//         // Verifica se a função fez as requisições HTTP usando axios.get()
-//         expect(mock.history.get.length).toBe(5);
-//         expect(mock.history.get[0].url).toBe('https://www.youtube.com/watch?v=J3gZH5w6eBo');
-//         expect(mock.history.get[1].url).toBe('https://github.com/workshopper/learnyounode');
-//         expect(mock.history.get[2].url).toBe('https://github.com/workshopper/learnyounode');
-//         expect(mock.history.get[3].url).toBe('http://www.teste.com/');
-//         expect(mock.history.get[4].url).toBe('http://www.testeteste.com/');
-
-//         // Verifica se a função atualizou corretamente os links após a validação
-//         const expected = [
-//           {
-//             href: 'https://www.youtube.com/watch?v=J3gZH5w6eBo',
-//             text: 'Youtube',
-//             file: './links.md',
-//             status: 200,
-//             ok: 'OK',
-//           },
-//           {
-//             href: 'https://github.com/workshopper/learnyounode',
-//             text: 'Github',
-//             file: './links.md',
-//             status: 200,
-//             ok: 'OK',
-//           },
-//           {
-//             href: 'https://github.com/workshopper/learnyounode',
-//             text: 'Github2',
-//             file: './links.md',
-//             status: 200,
-//             ok: 'OK',
-//           },
-//           {
-//             href: 'http://www.teste.com/',
-//             text: 'broken1',
-//             file: './links.md',
-//             status: 404,
-//             ok: 'fail',
-//           },
-//           {
-//             href: 'http://www.testeteste.com/',
-//             text: 'broken2',
-//             file: './links.md',
-//             status: 404,
-//             ok: 'fail',
-//           },
-//         ];
-//         expect(validatedLinks).toEqual(expected);
-//       });
-//   });
-// });
+describe('processDirectory', () => {
+  it('should reject with an error when processing a directory with invalid files', () => {
+    const invalidDirPath = '/path/to/invalid/directory';
+    return processDirectory(invalidDirPath, {})
+      .catch((error) => {
+        expect(error).toBeDefined(); // Verifica se um erro foi gerado
+      });
+  });
+});

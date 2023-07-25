@@ -27,6 +27,7 @@ function getLinks(file) {
     });
   });
 }
+
 // Verifica se o path é um diretório / Obtém os arquivos em um diretório / Filtra apenas os arquivos MD
 function getMarkdownFiles(dirPath) {
   return new Promise((resolve, reject) => {
@@ -46,10 +47,16 @@ function processDirectory(dirPath, options) {
   return getMarkdownFiles(dirPath).then((markdownFiles) => {
     const promises = markdownFiles.map((file) => {
       const fullPath = path.join(dirPath, file);
-      return mdLinks(fullPath, options);
+      return mdLinks(fullPath, options).catch((err) => {
+        // Linha 11 - Rejeita a promise com o mesmo erro
+        return Promise.reject(err);
+      });
     });
 
     return Promise.all(promises).then((results) => [].concat(...results));
+  }).catch((err) => {
+    // Linha 35 - Rejeita a promise com o mesmo erro
+    return Promise.reject(err);
   });
 }
 
@@ -77,9 +84,11 @@ function processMarkdownFile(filePath, options) {
     } else {
       return links;
     }
+  }).catch((err) => {
+    // Linha 35 - Rejeita a promise com o mesmo erro
+    return Promise.reject(err);
   });
 }
-
 
 // Função principal: Recebe o caminho e opções, processa diretório ou arquivo e retorna os links
 function mdLinks(filePath, options = {}) {
@@ -107,4 +116,4 @@ function statsLinks(links) {
   return { total, unique, broken };
 }
 
-module.exports = { mdLinks, statsLinks, processMarkdownFile };
+module.exports = { mdLinks, statsLinks, processMarkdownFile, processDirectory, getLinks, getMarkdownFiles };
