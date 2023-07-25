@@ -95,7 +95,8 @@ function mdLinks(filePath, options = {}) {
   const absolutePath = path.resolve(filePath);
 
   if (!fs.existsSync(absolutePath) || (!fs.lstatSync(absolutePath).isDirectory() && path.extname(absolutePath) !== '.md')) {
-    return Promise.reject('O caminho fornecido não é um diretório nem um arquivo Markdown.');
+    return Promise.reject(chalk.red.bold('O caminho fornecido não é um diretório nem um arquivo Markdown.'));
+    
   }
 
   if (fs.lstatSync(absolutePath).isDirectory()) {
@@ -116,4 +117,4 @@ function statsLinks(links) {
   return { total, unique, broken };
 }
 
-module.exports = { mdLinks, statsLinks, processMarkdownFile, processDirectory, getLinks, getMarkdownFiles };
+module.exports = { mdLinks, statsLinks, processDirectory, processMarkdownFile};

@@ -20,17 +20,13 @@
   },
   "dependencies": {
     "chalk": "^4.0.0",
-    "cross-fetch": "^4.0.0",
     "fs": "^0.0.1-security",
     "init": "^0.1.2",
-    "inquirer": "^7.3.3",
     "marked": "^5.1.0",
     "marked-gfm-heading-id": "^3.0.4",
     "marked-mangle": "^1.0.1",
-    "md-links-renata-ribeiro": "^0.1.0",
     "node": "^20.2.0",
     "node-fetch": "^3.3.1",
-    "readline-sync": "^1.4.10",
     "test": "^3.3.0"
   },
   "devDependencies": {
