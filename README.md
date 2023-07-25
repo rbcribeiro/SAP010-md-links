@@ -4,7 +4,7 @@
 
 
 
-Bem-vindo ao MdLinks! Esta é uma biblioteca para ler e extrair links de arquivos [Markdown]((https://docs.pipz.com/central-de-ajuda/learning-center/guia-basico-de-markdown#open)) e validar a disponibilidade desses links. <br>
+Bem-vindo ao MdLinks! Esta é uma biblioteca para ler e extrair links de arquivos [Markdown](https://docs.pipz.com/central-de-ajuda/learning-center/guia-basico-de-markdown#open) e validar a disponibilidade desses links. <br>
   #### Status do projeto: `Em progresso...`
   <img src="./icon-md.png" alt="Markdown Links" width="60" height="60">
   </div>

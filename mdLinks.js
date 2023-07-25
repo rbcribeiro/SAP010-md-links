@@ -27,10 +27,7 @@ function getLinks(file) {
     });
   });
 }
-
-// Verifica se o caminho é um diretório
-// Obtém a lista de arquivos em um diretório
-// Filtra apenas os arquivos Markdown da lista de arquivos
+// Verifica se o path é um diretório / Obtém os arquivos em um diretório / Filtra apenas os arquivos MD
 function getMarkdownFiles(dirPath) {
   return new Promise((resolve, reject) => {
     fs.readdir(dirPath, (err, files) => {
@@ -56,8 +53,7 @@ function processDirectory(dirPath, options) {
   });
 }
 
-// Verifica se o caminho é um arquivo Markdown
-// Processa um arquivo Markdown, buscando e validando os links
+// Verifica se o caminho é um arquivo MD / Processa um arquivo MD, buscando e validando os links
 function processMarkdownFile(filePath, options) {
     return getLinks(filePath).then((links) => {
       if (options.validate) {
@@ -86,24 +82,18 @@ function processMarkdownFile(filePath, options) {
 function mdLinks(filePath, options = {}) {
   const absolutePath = path.resolve(filePath);
 
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(absolutePath)) {
-      reject('Caminho inválido.');
-    } else if (fs.lstatSync(absolutePath).isDirectory()) {
-      processDirectory(absolutePath, options)
-        .then(resolve)
-        .catch(reject);
-    } else if (path.extname(absolutePath) === '.md') {
-      processMarkdownFile(absolutePath, options)
-        .then(resolve)
-        .catch(reject);
-    } else {
-      reject('O caminho fornecido não é um diretório nem um arquivo Markdown.');
-    }
-  });
+  if (!fs.existsSync(absolutePath) || (!fs.lstatSync(absolutePath).isDirectory() && path.extname(absolutePath) !== '.md')) {
+    return Promise.reject('O caminho fornecido não é um diretório nem um arquivo Markdown.');
+  }
+
+  if (fs.lstatSync(absolutePath).isDirectory()) {
+    return processDirectory(absolutePath, options);
+  }
+
+  if (path.extname(absolutePath) === '.md') {
+    return processMarkdownFile(absolutePath, options);
+  }
 }
-
-
 
 function statsLinks(links) {
   const total = links.length;
@@ -113,6 +103,5 @@ function statsLinks(links) {
 
   return { total, unique, broken };
 }
-
 
 module.exports = { mdLinks, statsLinks };

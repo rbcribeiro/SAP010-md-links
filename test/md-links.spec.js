@@ -2,12 +2,20 @@ const path = require('path');
 const { mdLinks, statsLinks } = require('../mdLinks');
 
 describe('mdLinks', () => {
-  it('should handle invalid path', () => {
-    return mdLinks('./invalid-path.md')
-      .catch((error) => {
-        expect(error).toBe('Caminho inválido.');
-      });
-  });
+    it('should reject with an error message when an invalid path is provided', () => {
+      const invalidPath = '/path/to/invalid/file.txt';
+      return mdLinks(invalidPath)
+        .catch((error) => {
+          expect(error).toBe('O caminho fornecido não é um diretório nem um arquivo Markdown.');
+        });
+    });
+    it('should reject with an error message when the path is not a Markdown file or directory', () => {
+      const invalidPath = '64545614'; // Caminho inválido (não é .md nem diretório)
+      return mdLinks(invalidPath)
+        .catch((error) => {
+          expect(error).toBe('O caminho fornecido não é um diretório nem um arquivo Markdown.');
+        });
+    });
 
   it('should process the directory and return links', () => {
     return mdLinks('./')
