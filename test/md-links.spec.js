@@ -2,6 +2,7 @@ const MockAdapter = require('axios-mock-adapter');
 const path = require('path');
 const { mdLinks, statsLinks, processDirectory, processMarkdownFile } = require('../mdLinks');
 const axios = require('axios');
+const chalk = require('chalk');
 
 const expectedDirectory = [
   {
@@ -82,7 +83,7 @@ describe('mdLinks', () => {
     const invalidPath = '/path/to/invalid/file.txt';
     return mdLinks(invalidPath)
       .catch((error) => {
-        expect(error).toBe('O caminho fornecido não é um diretório nem um arquivo Markdown.');
+        expect(error).toBe(chalk.red.bold('O caminho fornecido não é um diretório nem um arquivo Markdown.'));
       });
   });
 
