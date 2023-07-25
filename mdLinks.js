@@ -55,28 +55,31 @@ function processDirectory(dirPath, options) {
 
 // Verifica se o caminho é um arquivo MD / Processa um arquivo MD, buscando e validando os links
 function processMarkdownFile(filePath, options) {
-    return getLinks(filePath).then((links) => {
-      if (options.validate) {
-        const linkPromises = links.map((link) => {
-          return axios.get(link.href)
-            .then((response) => {
-              link.status = response.status;
-              link.ok = response.statusText;
-              return link;
-            })
-            .catch(() => {
-              link.status = 404;
-              link.ok = 'fail';
-              return link;
-            });
-        });
-  
-        return Promise.all(linkPromises);
-      } else {
-        return links;
-      }
-    });
-  }
+  return getLinks(filePath).then((links) => {
+    if (options.validate) {
+      const linkPromises = links.map((link) => {
+        return axios.get(link.href)
+          .then((response) => {
+            link.status = response.status;
+            link.ok = response.status === 200 ? 'OK' : 'fail';
+            return link;
+          })
+          .catch(() => {
+            link.status = 404;
+            link.ok = 'fail';
+            return link;
+          });
+      });
+
+      return Promise.all(linkPromises).then((validatedLinks) => {
+        return validatedLinks;
+      });
+    } else {
+      return links;
+    }
+  });
+}
+
 
 // Função principal: Recebe o caminho e opções, processa diretório ou arquivo e retorna os links
 function mdLinks(filePath, options = {}) {
@@ -104,4 +107,4 @@ function statsLinks(links) {
   return { total, unique, broken };
 }
 
-module.exports = { mdLinks, statsLinks };
+module.exports = { mdLinks, statsLinks, processMarkdownFile };
